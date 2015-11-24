@@ -16,10 +16,8 @@ class RegisterForm(Form): #Registration form validation
 		'Username',
 		validators=[
 			DataRequired(),
-			Regexp(
-				r'^[a-zA-Z0-9_]+$#',
-				message=("Your username should be one word and only contain: letters, numbers and underscores")
-				),
+			Regexp(r'^[a-zA-Z0-9_]+$#', message=("Your username should be one word")
+			),
 				name_exists
 			])
 				

@@ -31,7 +31,24 @@ def before_request():
 def after_request(response):
     g.db.close() #close the database connection after each request
     return response
-
+	
+@app.route('/')
+def index():
+    return 'Homepage is working... kinda...'
+	
+@app.route('/login/', methods=('GET', 'POST'))
+def login():
+	form = forms.LoginForm()
+	if form.validate_on_submit():
+		try:
+			user = models.User.get(models.User.email == form.email.data)
+		except models.DoesNotExist:
+			flash("Your email doesn't exist. Have you registered?", "error")
+		else:
+			login_user(user)
+			flash("You've been logged in!", "success")
+			return redirect(url_for('index'))
+		
 @app.route('/register/', methods=('GET', 'POST'))
 def register():
     form = forms.RegisterForm()
@@ -44,10 +61,6 @@ def register():
         )
         return redirect(url_for('index'))
     return render_template('registration.html', form=form)
-
-@app.route('/')
-def index():
-    return 'Homepage is working... kinda...'
 
 if __name__ == '__main__':
     models.initialize()
