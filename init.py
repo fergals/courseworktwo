@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, flash, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user
+from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 
 import forms
 import models
@@ -24,8 +24,10 @@ def load_user(userid):
 
 @app.before_request
 def before_request():
-    g.db = models.DATABASE #connect to the database before each request
+    """Connect to the database before each request."""
+    g.db = models.DATABASE
     g.db.connect()
+    g.user = current_user
 
 @app.after_request
 def after_request(response):
@@ -34,7 +36,8 @@ def after_request(response):
 	
 @app.route('/')
 def index():
-    return 'Homepage is working... kinda...'
+    allposts = models.Post.select().limit(100)
+    return render_template('allposts.html', allposts=allposts)
 
 @app.route('/register/', methods=('GET', 'POST'))
 def register():
@@ -67,21 +70,24 @@ def login():
                 flash("Your email or password doesn't match!", "error")
     return render_template('login.html', form=form)
 
-@app.route('/logout/')
+@app.route('/logout')
+@login_required
 def logout():
-	logout_user() #closes session
-	flash("You have been logged out", "success")
-	return redirect(url_for('index'))
+    logout_user()
+    flash("You've been logged out! Come back soon!", "success")
+    return redirect(url_for('index'))
+
+@app.route('/newpost/', methods=('GET', 'POST'))
+@login_required #user must be logged in to post msg
+def post():
+	form = forms.PostForm()
+	if form.validate_on_submit():
+		models.Post.create(user=g.user._get_current_object(),
+						   content=form.content.data.strip())
+		flash("Msg has been posted", "success")
+		return redirect(url_for('index'))
+	return render_template('postmsg.html', form=form)
 		
 if __name__ == '__main__':
     models.initialize()
-    try:
-        models.User.create_user(
-            username='fergal',
-            email='test@test.com',
-            password='password',
-            admin=True
-        )
-    except ValueError:
-        pass
     app.run(debug=DEBUG, host=HOST, port=PORT)

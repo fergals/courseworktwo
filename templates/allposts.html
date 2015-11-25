@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+{% for post in allposts %}
+    <article>
+        <h2>
+            {{ post.user.username }}
+        </h2>
+        <i class="clock"></i><time data-time="{{ post.timestamp }}" class="distime" datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}">{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</time>
+        <div class="post">
+            {{ post.content }}
+        </div>
+    </article>
+{% endfor %}
+{% endblock %}
