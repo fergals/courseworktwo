@@ -1,3 +1,6 @@
+{% extends "main.html" %}
+
+{% block content %}
 <form method="POST" action="" class="form">
 {% for field in form %}
 <div class="field">
@@ -9,5 +12,5 @@
 {{ field(placeholder=field.label.text) }}
 {% endfor %}
 <button type="submit" id="submit">Register</button>
-	
 </form>
+{% endblock %}
