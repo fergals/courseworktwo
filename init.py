@@ -1,5 +1,5 @@
 from flask import (Flask, g, render_template, flash, redirect, url_for)
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, login_user
 
 import forms
 import models
@@ -38,21 +38,27 @@ def index():
 	
 @app.route('/login/', methods=('GET', 'POST'))
 def login():
-	form = forms.LoginForm()
-	if form.validate_on_submit():
-		try:
-			user = models.User.get(models.User.email == form.email.data)
-		except models.DoesNotExist:
-			flash("Your email doesn't exist. Have you registered?", "error")
-		else:
-			login_user(user)
-			flash("You've been logged in!", "success")
-			return redirect(url_for('index'))
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        try:
+            user = models.User.get(models.User.email == form.email.data)
+        except models.DoesNotExist:
+            flash("Your email or password doesn't match!", "error")
+        else:
+            if user.password == form.password.data:
+                login_user(user)
+                flash("You've been logged in!", "success")
+                return redirect(url_for('index'))
+            else:
+                flash("Your email or password doesn't match!", "error")
+    return render_template('login.html', form=form)
+			
+	
 		
 @app.route('/register/', methods=('GET', 'POST'))
 def register():
     form = forms.RegisterForm()
-    if form.validate_on_submit(): #run form validation
+    if form.validate_on_submit(): #run registration form validation
         flash("You have registered successfully", "success") #use success flash message
         models.User.create_user(
             username=form.username.data,

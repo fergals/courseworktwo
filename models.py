@@ -2,6 +2,7 @@ import datetime
 from flask.ext.login import UserMixin
 from peewee import *
 
+
 DATABASE = SqliteDatabase('secondcoursework.db')
 
 class User(UserMixin, Model):

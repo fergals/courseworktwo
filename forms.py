@@ -11,35 +11,36 @@ def email_exists(form, field):
 	if User.select().where(User.email == field.data).exists():
 		raise ValidationError('A user with that email already exists! Please enter another email address')
 
-class RegisterForm(Form): #Registration form validation
-	username = StringField(
-		'Username',
-		validators=[
-			DataRequired(),
-			Regexp(r'^[a-zA-Z0-9_]+$#', message=("Your username should be one word")
-			),
-				name_exists
-			])
-				
-	email = StringField(
-		'Email',
-		validators=[
-			DataRequired(),
-			Email(),
-			email_exists
-			])
-	
-	password = PasswordField(
-		'Password',
-		validators=[
-			DataRequired(),
-			Length(min=2),
-			EqualTo('password2', message='Your passwords must match')
-			])
-	password2 = PasswordField(
-		'Confirm Password',
-			validators=[DataRequired()]
-			)
+class RegisterForm(Form): #registration form and validation
+    username = StringField(
+        'Username',
+        validators=[
+            DataRequired(),
+            Regexp(
+                r'^[a-zA-Z0-9_]+$',
+                message=("Username should be one word, letters, "
+                         "numbers, and underscores only.")
+            ),
+            name_exists
+        ])
+    email = StringField(
+        'Email',
+        validators=[
+            DataRequired(),
+            Email(),
+            email_exists
+        ])
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired(),
+            Length(min=2),
+            EqualTo('password2', message='Passwords must match')
+        ])
+    password2 = PasswordField(
+        'Confirm Password',
+        validators=[DataRequired()]
+    )
 
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
