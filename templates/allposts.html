@@ -3,14 +3,13 @@
 {% block content %}
 
 {% for post in allposts %}
-    <article>
-        <h2>
-            {{ post.user.username }}
-        </h2>
-        <i class="clock"></i><time data-time="{{ post.timestamp }}" class="distime" datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}">{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</time>
-        <div class="post">
-            {{ post.content }}
-        </div>
-    </article>
+
+<ul class="style1">
+				<li>
+					<p class="date">{{ post.user.username }}</p>
+					<h3>{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</h3>
+					<p>{{ post.content }}</p>
+				</li>
+			</ul>
 {% endfor %}
 {% endblock %}

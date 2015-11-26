@@ -48,3 +48,4 @@ class LoginForm(Form): #Login Form
 
 class PostForm(Form): #Post new message form
 	content = TextAreaField("Enter message", validators=[DataRequired()])
+	tags = TextAreaField("Enter tags", validators=[DataRequired()])

@@ -42,6 +42,7 @@ class Post(Model):
         related_name='posts'
     )
     content = TextField()
+	tags = TextField()
     
     class Meta:
         database = DATABASE
