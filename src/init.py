@@ -59,21 +59,21 @@ def login():
         try:
             user = models.User.get(models.User.email == form.email.data)
         except models.DoesNotExist:
-            flash("Your email or password doesn't match!", "error")
+            flash("Uh oh! Your email doesn't match", "error")
         else:
             if user.password == form.password.data:
                 login_user(user) #create login session
                 flash("You've been logged in!", "success")
                 return redirect(url_for('index'))
             else:
-                flash("Your email or password doesn't match!", "error")
+                flash("Uh Oh! Your email or password doesn't match!", "error")
     return render_template('login.html', form=form)
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash("You've been logged out! Come back soon!", "success")
+    flash("You've been logged out! See you again soon!", "success")
     return redirect(url_for('index'))
 
 @app.route('/newpost/', methods=('GET', 'POST'))

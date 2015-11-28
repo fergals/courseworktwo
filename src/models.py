@@ -18,14 +18,9 @@ class User(UserMixin, Model):
 	
 	def get_posts(self):
 		return Post.select().where(Post.user == self)
-	
-	def get_all(self):
-		return Post.select().where(
-			(Post.user == self)
-			)
-        
+	 
     @classmethod
-    def create_user(cls, username, email, password, admin=False):
+    def new_user(cls, username, email, password):
         try:
             cls.create(
                 username=username,

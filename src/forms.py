@@ -17,7 +17,7 @@ class RegisterForm(Form): #registration form and validation
         validators=[
             DataRequired(),
             Regexp(
-                r'^[a-zA-Z0-9_]+$',
+                r'^[a-zA-Z0-9_]+$', #defines which characters are allowed in username
                 message=("Username should be one word, letters, "
                          "numbers, and underscores only.")
             ),
@@ -48,4 +48,3 @@ class LoginForm(Form): #Login Form
 
 class PostForm(Form): #Post new message form
 	content = TextAreaField("Enter message", validators=[DataRequired()])
-	tags = TextAreaField("Enter tags", validators=[DataRequired()])
