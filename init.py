@@ -24,7 +24,6 @@ def load_user(userid):
 
 @app.before_request
 def before_request():
-    """Connect to the database before each request."""
     g.db = models.DATABASE
     g.db.connect()
     g.user = current_user
@@ -89,5 +88,4 @@ def post():
 	return render_template('postmsg.html', form=form)
 		
 if __name__ == '__main__':
-    models.initialize()
     app.run(debug=DEBUG, host=HOST, port=PORT)

@@ -10,14 +10,20 @@ class User(UserMixin, Model):
     email = CharField(unique=True)
     password = CharField(max_length=100)
     joined_at = DateTimeField(default=datetime.datetime.now)
+    is_admin = BooleanField(default=False)
 	  
     class Meta:
         database = DATABASE
-        order_by = ('-joined_at',) #creates tuple
+        order_by = ('-joined_at',)
 	
 	def get_posts(self):
 		return Post.select().where(Post.user == self)
 	
+	def get_all(self):
+		return Post.select().where(
+			(Post.user == self)
+			)
+        
     @classmethod
     def create_user(cls, username, email, password, admin=False):
         try:
@@ -36,7 +42,7 @@ class Post(Model):
     )
     content = TextField()
     
-class Meta:
+    class Meta:
         database = DATABASE
         order_by = ('-timestamp',) #newest items appear at top
 		
